@@ -12,16 +12,21 @@ let totalRevenue = 0;
 let failedPayments = 0;
 let chargebacks = 0;
 
-app.use(bodyParser.json());
+app.use(bodyParser.raw({ type: "application/json" }));
 
 app.post("/paystack-webhook", (req, res) => {
-  const payload = JSON.stringify(req.body);
+  const payload = req.body;
   const signature = req.headers["x-paystack-signature"];
+
+  console.log("Received payload:", payload.toString());
+  console.log("Received signature:", signature);
 
   const expectedSignature = crypto
     .createHmac("sha512", PAYSTACK_SECRET_KEY)
     .update(payload)
     .digest("hex");
+
+  console.log("Expected signature:", expectedSignature);
 
   // To verify the signature
   if (signature !== expectedSignature) {
