@@ -1,4 +1,5 @@
 const crypto = require("crypto");
+require("dotenv").config();
 
 // Function to verify Paystack signature
 function verifyPaystackSignature(payload, signature) {
